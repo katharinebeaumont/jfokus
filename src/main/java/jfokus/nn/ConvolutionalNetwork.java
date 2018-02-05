@@ -29,7 +29,7 @@ import java.util.Map;
 /**
  * Code from:
  * /dl4j-examples/src/main/java/org/deeplearning4j/examples/convolution/LenetMnistExample.java
- * 
+ * See this ^^^ code for useful comments
  */
 public class ConvolutionalNetwork {
 
@@ -44,42 +44,21 @@ public class ConvolutionalNetwork {
     MultiLayerNetwork model;
     
     public void train() throws IOException {
-        log.info("Load data....");
+    		log.info("***Training model: Convolutional NN***");
         DataSetIterator mnistTrain = new MnistDataSetIterator(batchSize,true,12345);
         DataSetIterator mnistTest = new MnistDataSetIterator(batchSize,false,12345);
 
-        /*
-            Construct the neural network
-         */
-        log.info("Build model....");
-
         MultiLayerConfiguration conf = buildConfiguration();
-
-        /*
-        Regarding the .setInputType(InputType.convolutionalFlat(28,28,1)) line: This does a few things.
-        (a) It adds preprocessors, which handle things like the transition between the convolutional/subsampling layers
-            and the dense layer
-        (b) Does some additional configuration validation
-        (c) Where necessary, sets the nIn (number of input neurons, or input depth in the case of CNNs) values for each
-            layer based on the size of the previous layer (but it won't override values manually set by the user)
-
-        InputTypes can be used with other layer types too (RNNs, MLPs etc) not just CNNs.
-        For normal images (when using ImageRecordReader) use InputType.convolutional(height,width,depth).
-        MNIST record reader is a special case, that outputs 28x28 pixel grayscale (nChannels=1) images, in a "flattened"
-        row vector format (i.e., 1x784 vectors), hence the "convolutionalFlat" input type used here.
-        */
 
         model = new MultiLayerNetwork(conf);
         model.init();
 
-
-        log.info("Train model....");
         model.setListeners(new ScoreIterationListener(1));
         for( int i=0; i<nEpochs; i++ ) {
             model.fit(mnistTrain);
             log.info("*** Completed epoch {} ***", i);
 
-            log.info("Evaluate model....");
+            log.info("***Evaluating model***");
             Evaluation eval = model.evaluate(mnistTest);
             log.info(eval.stats());
             mnistTest.reset();

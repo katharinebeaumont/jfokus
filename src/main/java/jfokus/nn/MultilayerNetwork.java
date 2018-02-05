@@ -26,6 +26,7 @@ import org.slf4j.LoggerFactory;
 /** 
  * Lifted from: dl4j-examples: 
  * /dl4j-examples/src/main/java/org/deeplearning4j/examples/feedforward/mnist/MLPMnistTwoLayerExample.java
+ * See this ^^^ code for useful comments
 */ 
 public class MultilayerNetwork {
 
@@ -54,7 +55,7 @@ public class MultilayerNetwork {
         model.setListeners(new ScoreIterationListener(5));  //print the score with every iteration
 
         //Train the model
-        log.info("***Training model***");
+        log.info("***Training model: Feed Forward***");
         for( int i=0; i<numEpochs; i++ ){
         	log.info("Epoch " + i);
             model.fit(mnistTrain);
